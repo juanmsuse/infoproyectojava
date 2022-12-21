@@ -13,12 +13,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.List;
@@ -56,6 +58,13 @@ public class Organization implements Serializable{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Event> events;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Turn> turn;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private User user;
+	
 	@Column
 	private Integer tel;
 
@@ -63,23 +72,99 @@ public class Organization implements Serializable{
 	@Column(name="inactivity")
 	private boolean inactivity = Boolean.valueOf(false);
 
-	public Organization() {
-		super();
-		// TODO Auto-generated constructor stub
+	public Long getId() {
+		return id;
 	}
 
-	public Organization(Long id, String name, Integer cuit, String password, String address, String email,
-			Date subscription, List<Event> events, Integer tel, boolean inactivity) {
-		super();
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getCuit() {
+		return cuit;
+	}
+
+	public void setCuit(Integer cuit) {
 		this.cuit = cuit;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public Date getSubscription() {
+		return subscription;
+	}
+
+	public void setSubscription(Date subscription) {
 		this.subscription = subscription;
+	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
 		this.events = events;
+	}
+
+	public List<Turn> getTurn() {
+		return turn;
+	}
+
+	public void setTurn(List<Turn> turn) {
+		this.turn = turn;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Integer getTel() {
+		return tel;
+	}
+
+	public void setTel(Integer tel) {
 		this.tel = tel;
+	}
+
+	public boolean isInactivity() {
+		return inactivity;
+	}
+
+	public void setInactivity(boolean inactivity) {
 		this.inactivity = inactivity;
 	}
 
@@ -87,84 +172,33 @@ public class Organization implements Serializable{
 		return serialVersionUID;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Integer getCuit() {
-		return cuit;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public Date getSubscription() {
-		return subscription;
-	}
-
-	public List<Event> getEvents() {
-		return events;
-	}
-
-	public Integer getTel() {
-		return tel;
-	}
-
-	public boolean isInactivity() {
-		return inactivity;
-	}
-
-	public void setId(Long id) {
+	public Organization(Long id, String name, Integer cuit, String password, String address, String email,
+			Date subscription, List<Event> events, List<Turn> turn, User user, Integer tel, boolean inactivity) {
+		super();
 		this.id = id;
-	}
-
-	public void setName(String name) {
 		this.name = name;
-	}
-
-	public void setCuit(Integer cuit) {
 		this.cuit = cuit;
-	}
-
-	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public void setAddress(String address) {
 		this.address = address;
-	}
-
-	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public void setSubscription(Date subscription) {
 		this.subscription = subscription;
-	}
-
-	public void setEvents(List<Event> events) {
 		this.events = events;
-	}
-
-	public void setTel(Integer tel) {
+		this.turn = turn;
+		this.user = user;
 		this.tel = tel;
-	}
-
-	public void setInactivity(boolean inactivity) {
 		this.inactivity = inactivity;
 	}
 
-}
+	public Organization() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Organization [id=" + id + ", name=" + name + ", cuit=" + cuit + ", password=" + password + ", address="
+				+ address + ", email=" + email + ", subscription=" + subscription + ", events=" + events + ", turn="
+				+ turn + ", user=" + user + ", tel=" + tel + ", inactivity=" + inactivity + "]";
+	}
+
+	}

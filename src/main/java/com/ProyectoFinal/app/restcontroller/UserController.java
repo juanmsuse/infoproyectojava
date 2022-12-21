@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ProyectoFinal.app.dto.UserDto;
+import com.ProyectoFinal.app.entity.Event;
+import com.ProyectoFinal.app.entity.Turn;
 import com.ProyectoFinal.app.entity.User;
+import com.ProyectoFinal.app.service.IEventService;
+import com.ProyectoFinal.app.service.ITurnService;
 import com.ProyectoFinal.app.service.IUserService;
 
 @RequestMapping("api/v1/user")
@@ -31,21 +35,40 @@ public class UserController {
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired IUserService userService;
-	
+	@Autowired ITurnService TurnService;
+	@Autowired IEventService eventService;
+
 	@GetMapping("/allactive")
 	public List<User>findAll(){
 		return userService.findByAll();
 	}
 	
-	@PostMapping("/new")
-	public ResponseEntity <Map<String,Object>>newUser(@RequestBody UserDto userDto){
-		log.info("user"+userDto.toString());
-		Map<String,Object>response= new HashMap<>();
-		UserDto newUser = userService.save(userDto);
-		response.put("user", newUser);
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
+	//@PostMapping("/new")
+	//public ResponseEntity <Map<String,Object>>newUser(@RequestBody @Valid UserDto userDto) throws Exception{
+		//log.info("user"+userDto.toString());
+		//Map<String,Object>response= new HashMap<>();
+		//UserDto newUser = userService.save(userDto);
+		//response.put("user", newUser);
+		//return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK); 
 		
-	}
+	//}
+	@PostMapping("/create")
+    public ResponseEntity<Object> newturno(@RequestBody UserDto userDto) {
+                                                             
+        Turn turn = new Turn();
+        
+        Event event = eventService.findByid(userDto.getEvent().getId());
+        turn.setEvent(event);
+        turn.setOrganization(event.getOrganization());
+ 
+        
+        userDto.setTurn(turn);
+        Map<String, Object> response = new HashMap<>();
+        UserDto newUser = userService.save(userDto);
+        response.put("user", newUser);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 	
 	@PutMapping("/update")
 	public ResponseEntity<Map<String, Object>> update(@RequestBody UserDto userDto){

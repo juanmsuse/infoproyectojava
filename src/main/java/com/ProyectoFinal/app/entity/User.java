@@ -5,10 +5,13 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.GenerationType;
 import java.util.List;
 import javax.persistence.JoinColumn;
@@ -17,6 +20,8 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity(name="users")
@@ -34,44 +39,37 @@ public class User implements Serializable{
 	@Column
 	private String lastname;
 	
-	@Column
+	@Column(unique=true)
 	private Integer dni;
 	
 	@Column
 	private String code;
 	
 
-	@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "users_id_turns_id", 
-        joinColumns = { @JoinColumn(name = "user_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "turn_id")} , 
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","turn_id"})}
-       )
-	private List<Turn> turn;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-        name = "users_id_events_id", 
-        joinColumns = { @JoinColumn(name = "user_id") }, 
-        inverseJoinColumns = { @JoinColumn(name = "event_id")} , 
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","event_id"})}
-    )
-	private List<Event> events;
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private Turn turn;
 	
-	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Organization organization;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Event event;
+	
+	
 	// este parametro hace referecia a inactivo en la api
 	@Column(name="inactivity_app")
 	private boolean inactivityApp = Boolean.valueOf(false);
+
 
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(Long id, String name, String lastname, Integer dni, String code, List<Turn> turn, List<Event> events,
-			Organization organization, boolean inactivityApp) {
+
+	public User(Long id, String name, String lastname, Integer dni, String code, Turn turn, Organization organization,
+			Event event, boolean inactivityApp) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -79,99 +77,113 @@ public class User implements Serializable{
 		this.dni = dni;
 		this.code = code;
 		this.turn = turn;
-		this.events = events;
 		this.organization = organization;
+		this.event = event;
 		this.inactivityApp = inactivityApp;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public Integer getDni() {
-		return dni;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public List<Turn> getTurn() {
-		return turn;
-	}
-
-	public List<Event> getEvents() {
-		return events;
-	}
-
-	public Organization getOrganization() {
-		return organization;
-	}
-
-	public boolean isInactivityApp() {
-		return inactivityApp;
-	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
+
+	public String getName() {
+		return name;
+	}
+
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+	public String getLastname() {
+		return lastname;
+	}
+
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
 
+
+	public Integer getDni() {
+		return dni;
+	}
+
+
 	public void setDni(Integer dni) {
 		this.dni = dni;
 	}
+
+
+	public String getCode() {
+		return code;
+	}
+
 
 	public void setCode(String code) {
 		this.code = code;
 	}
 
-	public void setTurn(List<Turn> turn) {
+
+	public Turn getTurn() {
+		return turn;
+	}
+
+
+	public void setTurn(Turn turn) {
 		this.turn = turn;
 	}
 
-	public void setEvents(List<Event> events) {
-		this.events = events;
+
+	public Organization getOrganization() {
+		return organization;
 	}
+
 
 	public void setOrganization(Organization organization) {
 		this.organization = organization;
 	}
 
+
+	public Event getEvent() {
+		return event;
+	}
+
+
+	public void setEvent(Event event) {
+		this.event = event;
+	}
+
+
+	public boolean isInactivityApp() {
+		return inactivityApp;
+	}
+
+
 	public void setInactivityApp(boolean inactivityApp) {
 		this.inactivityApp = inactivityApp;
 	}
 
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", lastname=" + lastname + ", dni=" + dni + ", code=" + code
-				+ ", turn=" + turn + ", events=" + events + ", organization=" + organization + ", inactivityApp="
+				+ ", turn=" + turn + ", organization=" + organization + ", event=" + event + ", inactivityApp="
 				+ inactivityApp + "]";
 	}
-	
-}
-
-	
-	
-	
-	
 
 
+		}

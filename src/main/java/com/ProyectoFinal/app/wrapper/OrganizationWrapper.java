@@ -15,7 +15,7 @@ public class OrganizationWrapper {
 		entity.setPassword(dto.getPassword());
 		entity.setTel(dto.getTel());
 		entity.setSubscription(dto.getSubscription());
-		
+		entity.setUser(dto.getUser());
 		
 		return entity;
 		}	
@@ -31,6 +31,7 @@ public class OrganizationWrapper {
 			dto.setPassword(entity.getPassword());
 			dto.setTel(entity.getTel());
 			dto.setSubscription(entity.getSubscription());
+			dto.setUser(entity.getUser());
 			return dto;
 			}	
 }

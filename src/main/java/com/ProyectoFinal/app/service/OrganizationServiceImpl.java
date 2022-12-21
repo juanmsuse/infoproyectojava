@@ -55,4 +55,10 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		return organizationDao.findAll();
 	}
 
+	@Override
+	public Organization findBypassword(String password) {
+		// TODO Auto-generated method stub
+		return organizationDao.findBypassword(password);
+	}
+
 }

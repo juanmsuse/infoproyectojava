@@ -13,9 +13,7 @@ public class UserWrapper {
 	entity.setLastname(dto.getLastname());
 	entity.setDni(dto.getDni());
 	entity.setCode(dto.getCode());
-	entity.setOrganization(dto.getOrganization());
-	entity.setEvents(dto.getEvents());
-	
+	entity.setTurn(dto.getTurn());
 	return entity;
 	}	
 
@@ -27,8 +25,7 @@ public class UserWrapper {
 		dto.setLastname(entity.getLastname());
 		dto.setDni(entity.getDni());
 		dto.setCode(entity.getCode());
-		dto.setOrganization(entity.getOrganization());
-		dto.setEvents(entity.getEvents());
+		dto.setTurn(entity.getTurn());
 		return dto;
 		}	
 }

@@ -13,5 +13,7 @@ public interface IOrganizationDao extends  JpaRepository<Organization, Long> {
 	public Organization findBycuit (Integer cuit);
 	
 	public List<Organization> findByname (String name);
+	
+	public Organization findBypassword (String password);
 
 }

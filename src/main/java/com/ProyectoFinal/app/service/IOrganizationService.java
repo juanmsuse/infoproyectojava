@@ -19,5 +19,7 @@ public interface IOrganizationService {
 	public Organization findBycuit (Integer cuit);
 	
 	public List<Organization>findByAll();
+	
+	public Organization findBypassword (String password);
 
 }
